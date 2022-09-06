@@ -16,7 +16,7 @@ export class validRequest implements PipeTransform {
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
-    console.log(value, metatype);
+    // console.log(value, metatype);
 
     const object = plainToClass(metatype, value, {});
     // console.log('参数：', value);

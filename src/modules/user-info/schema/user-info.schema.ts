@@ -3,10 +3,11 @@ import mongoose from 'mongoose';
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 const userObject = {
-  userId: {
-    type: ObjectId,
-    unique: true,
-  },
+  // userId: {
+  //   type: ObjectId,
+  //   unique: true,
+  // },
+  _id: ObjectId,
   name: String,
   tag: Array,
   introduce: String,

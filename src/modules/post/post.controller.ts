@@ -1,3 +1,4 @@
+import { LikePostDto, ViewPostDto } from './dto/like.dto';
 import {
   Controller,
   Get,
@@ -8,6 +9,7 @@ import {
   Post,
   Patch,
   Req,
+  Request,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { APIBase } from 'src/config/api.config';
@@ -37,6 +39,15 @@ export class PostController {
     return this.postService.create(CreatePostDto);
   }
 
+  // 增加文章浏览量
+  @Get('/views')
+  addViews(@Query() query: ViewPostDto) {
+    console.log('hello');
+
+    return this.postService.addViews(query);
+  }
+
+  // 获取文章列表
   @Get()
   @ApiOkResponse({
     type: [CreatePostResponseDto],
@@ -45,6 +56,7 @@ export class PostController {
     return this.postService.findAll(params);
   }
 
+  // 获取文章详情
   @Get(':id')
   @ApiOkResponse({
     type: CreatePostResponseDto,
@@ -70,5 +82,14 @@ export class PostController {
   })
   remove(@Param('id') id: string) {
     return this.postService.remove(id);
+  }
+
+  @Post('like')
+  @PostContent()
+  @Roles(RoleType.ADMIN, RoleType.GENERAL_USER)
+  likePost(@Body() body: LikePostDto, @Req() req) {
+    const userId = req.user.userId;
+
+    return this.postService.likePost(userId, body);
   }
 }

@@ -7,7 +7,7 @@ import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [AuthModule],
-  controllers: [PostController, PostCommentController],
+  controllers: [PostCommentController, PostController],
   providers: [PostService, PostCommentService],
 })
 export class PostModule {}

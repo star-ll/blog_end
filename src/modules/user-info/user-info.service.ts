@@ -24,7 +24,7 @@ export class UserInfoService {
           return new ResponseJSON(res, '操作成功');
         });
     } else if (userId) {
-      return this.userInfoModal.find({ userId }).then((res) => {
+      return this.userInfoModal.find({ _id: userId }).then((res) => {
         return new ResponseJSON(res, '操作成功');
       });
     } else {
@@ -33,7 +33,7 @@ export class UserInfoService {
   }
 
   findOne(id: string) {
-    return this.userInfoModal.find({ userId: id }).then((res) => {
+    return this.userInfoModal.find({ _id: id }).then((res) => {
       return new ResponseJSON(res, '操作成功');
     });
   }
@@ -42,7 +42,7 @@ export class UserInfoService {
     return this.userInfoModal
       .updateOne(
         {},
-        { userId, ...updateUserInfoDto },
+        { _id: userId, ...updateUserInfoDto },
         {
           upsert: true,
         },
@@ -55,7 +55,7 @@ export class UserInfoService {
   remove(id: string) {
     return this.userInfoModal
       .remove({
-        userId: id,
+        _id: id,
       })
       .then((res) => {
         return new ResponseJSON(res, '操作成功');

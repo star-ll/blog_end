@@ -1,36 +1,52 @@
 import mongoose from 'mongoose';
 
-// const likeItem = new mongoose.Schema({
-//   ref: '',
-// });
-
-const commentItem = new mongoose.Schema({
-  userId: mongoose.SchemaTypes.ObjectId,
-});
-
-export const PostSchema = new mongoose.Schema({
-  userId: String,
-
-  title: String,
-
-  author: String,
-
-  createTime: Date,
-
-  updateTime: Date,
-
-  content: String,
-
-  // 点赞
-  likes: [
-    {
+export const CommentSchema = new mongoose.Schema(
+  {
+    content: String,
+    author: {
       ref: 'user_info',
       type: mongoose.Types.ObjectId,
     },
-  ],
+  },
+  {
+    timestamps: {
+      createdAt: 'createTime',
+      updatedAt: 'updateTime',
+    },
+  },
+);
 
-  // 评论
-  comments: [commentItem],
-});
+export const PostSchema = new mongoose.Schema(
+  {
+    userId: String,
+
+    title: String,
+
+    author: String,
+
+    content: String,
+
+    views: {
+      type: Number,
+      default: 0,
+    }, // 浏览量
+    // 点赞
+    likes: [
+      {
+        ref: 'user_info',
+        type: mongoose.Types.ObjectId,
+      },
+    ],
+
+    // 评论
+    comments: [CommentSchema],
+  },
+  {
+    timestamps: {
+      createdAt: 'createTime',
+      updatedAt: 'updateTime',
+    },
+  },
+);
 
 export const postModel = mongoose.model('post', PostSchema);

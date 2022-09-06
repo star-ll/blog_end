@@ -1,4 +1,9 @@
-import { IsDateString, IsDefined, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsDefined,
+  IsNumberString,
+  IsString,
+} from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -27,6 +32,11 @@ export class CreatePostResponseDto {
 }
 
 export class FindAllPostDto {
+  @IsNumberString()
+  offset: number;
+  @IsNumberString()
+  limit: number;
+
   @IsString()
   author?: string;
   @IsString()

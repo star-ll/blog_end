@@ -1,13 +1,9 @@
 import {
   IsArray,
-  IsDefined,
   IsMobilePhone,
-  IsNumber,
   IsString,
   IsUrl,
-  Max,
   MaxLength,
-  Min,
 } from 'class-validator';
 
 export class CreateUserInfoDto {
@@ -15,7 +11,7 @@ export class CreateUserInfoDto {
   name: string;
 
   @IsArray()
-  tag?: string;
+  tag?: string[];
 
   @IsString()
   @MaxLength(300)

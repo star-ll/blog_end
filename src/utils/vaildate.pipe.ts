@@ -12,19 +12,20 @@ import { validate } from 'class-validator';
 export class validRequest implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
     const metatype = metadata.metatype;
+
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
-    // console.log(value, metatype);
+    console.log(value, metatype);
 
-    const object = plainToClass(metatype, value);
-    console.log('参数：', value);
+    const object = plainToClass(metatype, value, {});
+    // console.log('参数：', value);
 
     const errors = await validate(object, {
       skipMissingProperties: true,
       forbidUnknownValues: true,
     });
-    console.log(errors);
+    // console.log(errors);
     let errorMessage = '';
     errors.forEach((item) => {
       Object.keys(item.constraints).forEach((key) => {
@@ -32,6 +33,8 @@ export class validRequest implements PipeTransform {
         errorMessage += `${key}: ${msg};\n`;
       });
     });
+
+    console.log(value, errorMessage);
 
     if (errors.length > 0) {
       throw new HttpException(

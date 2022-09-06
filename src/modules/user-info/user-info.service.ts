@@ -7,20 +7,28 @@ import { UpdateUserInfoDto } from './dto/update-user-info.dto';
 export class UserInfoService {
   private readonly userInfoModal = userInfoModal;
 
-  async findAll(count?: number) {
+  async findAll({ count, userId }: { count?: number; userId?: string }) {
     if (count) {
-      const userInfoNum = Math.random() * count;
+      let random = 0;
       return this.userInfoModal
         .find({})
-        .limit(-1)
-        .skip(userInfoNum)
+        .estimatedDocumentCount()
+        .then((size) => {
+          const max = size + 1 - count;
+          const min = 0;
+          random = Math.floor(Math.random() * (max - min + 1));
+
+          return this.userInfoModal.find({}).skip(random).limit(count);
+        })
         .then((res) => {
           return new ResponseJSON(res, '操作成功');
         });
-    } else {
-      return this.userInfoModal.find({}).then((res) => {
+    } else if (userId) {
+      return this.userInfoModal.find({ userId }).then((res) => {
         return new ResponseJSON(res, '操作成功');
       });
+    } else {
+      return ResponseJSON(null, '参数错误:必须传token或者count参数', 400);
     }
   }
 
@@ -30,15 +38,27 @@ export class UserInfoService {
     });
   }
 
-  update(id: string, updateUserInfoDto: UpdateUserInfoDto) {
+  update(userId: string, updateUserInfoDto: UpdateUserInfoDto) {
     return this.userInfoModal
-      .findByIdAndUpdate(id, updateUserInfoDto)
+      .updateOne(
+        {},
+        { userId, ...updateUserInfoDto },
+        {
+          upsert: true,
+        },
+      )
       .then((res) => {
-        console.log(res);
+        return new ResponseJSON(true, '操作成功');
       });
   }
 
   remove(id: string) {
-    return `This action removes a #${id} userInfo`;
+    return this.userInfoModal
+      .remove({
+        userId: id,
+      })
+      .then((res) => {
+        return new ResponseJSON(res, '操作成功');
+      });
   }
 }

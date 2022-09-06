@@ -12,7 +12,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { join } from 'path';
-import { ResponseJSON } from 'src/utils';
+import { RoleType } from 'src/config/auth.config';
+import { ResponseJSON, Roles } from 'src/utils';
 import { APIBase } from '../../config/api.config';
 import { imageCacheTime } from '../../config/cache.config';
 import { FetchImageDto } from './dto/fetch-image.dto';
@@ -34,6 +35,7 @@ export class ImageController {
   }
 
   @Post()
+  @Roles(RoleType.ADMIN, RoleType.GENERAL_USER)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -42,6 +44,7 @@ export class ImageController {
   })
   update(@UploadedFile() file: Express.Multer.File) {
     const reg = /^image/;
+
     if (!reg.test(file.mimetype)) {
       throw new HttpException('只接受图片文件', HttpStatus.FORBIDDEN);
     }
@@ -50,7 +53,9 @@ export class ImageController {
     }
     try {
       this.imageService.saveImage(file);
-      return new ResponseJSON(true);
+      return new ResponseJSON({
+        imageUrl: file.originalname,
+      });
     } catch {
       throw new HttpException('上传失败', 500);
     }

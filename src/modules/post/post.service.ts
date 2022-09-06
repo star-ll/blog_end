@@ -22,9 +22,17 @@ export class PostService {
   }
 
   findAll(params?: FindAllPostDto) {
-    return this.postModel.find(params || {}, { __v: 0 }).then((res) => {
-      return new ResponseJSON(res);
-    });
+    const { offset, limit } = params;
+    const queryParams = params ? { ...params, offset: null, limit: null } : {};
+
+    return this.postModel
+      .find(queryParams, { __v: 0 })
+      .sort({ createTime: -1 })
+      .skip(offset)
+      .limit(limit)
+      .then((res) => {
+        return new ResponseJSON(res);
+      });
   }
 
   async findOne(id: string) {

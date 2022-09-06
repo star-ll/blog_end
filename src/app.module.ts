@@ -7,6 +7,7 @@ import { LoginModule } from './modules/login/login.module';
 import { PostModule } from './modules/post/post.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserInfoModule } from './modules/user-info/user-info.module';
+import { SearchModule } from './modules/search/search.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserInfoModule } from './modules/user-info/user-info.module';
     LoginModule,
     PostModule,
     UserInfoModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

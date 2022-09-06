@@ -12,7 +12,10 @@ export const Roles = (...roles: RoleType[]) =>
   );
 
 // HTTP Request
-export const PostContent = () =>
-  applyDecorators(
-    ApiConsumes('application/x-www-form-urlencoded', 'application/json'),
-  );
+export const PostContent = (contentTypes?: string[]) => {
+  const types = contentTypes || [
+    'application/x-www-form-urlencoded',
+    'application/json',
+  ];
+  return applyDecorators(ApiConsumes(...types));
+};

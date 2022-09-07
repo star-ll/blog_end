@@ -14,7 +14,7 @@ export class UserInfoService {
         .find({})
         .estimatedDocumentCount()
         .then((size) => {
-          const max = size + 1 - count;
+          const max = size - count;
           const min = 0;
           random = Math.floor(Math.random() * (max - min + 1));
 
@@ -24,9 +24,11 @@ export class UserInfoService {
           return new ResponseJSON(res, '操作成功');
         });
     } else if (userId) {
-      return this.userInfoModal.find({ _id: userId }).then((res) => {
-        return new ResponseJSON(res, '操作成功');
-      });
+      return this.userInfoModal
+        .findOne({ _id: userId }, { __v: 0 })
+        .then((res) => {
+          return new ResponseJSON(res, '操作成功');
+        });
     } else {
       return ResponseJSON(null, '参数错误:必须传token或者count参数', 400);
     }

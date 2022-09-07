@@ -10,9 +10,10 @@ import { postModel } from './schema/post.schema';
 export class PostService {
   private postModel = postModel;
 
-  create(createPostDto: CreatePostDto) {
+  create(userId, createPostDto: CreatePostDto) {
     return this.postModel
       .create({
+        userId,
         ...createPostDto,
       })
       .then(() => {
@@ -24,8 +25,8 @@ export class PostService {
     const { offset, limit } = params;
     const queryParams = params ? { ...params, offset: null, limit: null } : {};
 
-    return this.postModel
-      .find(queryParams, { __v: 0, comments: 0 })
+    const posts = this.postModel.find(queryParams, { __v: 0, comments: 0 });
+    return posts
       .sort({ createTime: -1 })
       .skip(offset)
       .limit(limit)

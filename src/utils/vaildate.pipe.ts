@@ -34,7 +34,7 @@ export class validRequest implements PipeTransform {
       });
     });
 
-    console.log(value, errorMessage);
+    // console.log(value, errorMessage);
 
     if (errors.length > 0) {
       throw new HttpException(

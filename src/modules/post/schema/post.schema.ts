@@ -26,6 +26,8 @@ export const PostSchema = new mongoose.Schema(
 
     content: String,
 
+    tag: [String],
+
     views: {
       type: Number,
       default: 0,

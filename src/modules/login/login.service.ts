@@ -1,3 +1,4 @@
+import { userInfoModal } from './../user-info/schema/user-info.schema';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginModel } from './schema/users.schema';
@@ -5,10 +6,10 @@ import { ResponseJSON } from 'src/utils/response';
 
 @Injectable()
 export class LoginService {
-  private loginModel: any;
-  constructor(private jwtService: JwtService) {
-    this.loginModel = LoginModel;
-  }
+  private readonly loginModel = LoginModel;
+  private readonly userInfoModal = userInfoModal;
+
+  constructor(private jwtService: JwtService) {}
 
   valid(email, password?: string) {
     const query: { email: string; password?: string } = { email };
@@ -32,12 +33,18 @@ export class LoginService {
 
   async register(body) {
     return this.valid(body.email)
-      .then((res) => {
+      .then(async (res) => {
         if (res == null) {
-          return this.loginModel.create({
+          const user = await this.loginModel.create({
             email: body.email,
             password: body.password,
             role: body.role,
+          });
+          console.log(user);
+
+          const userInfo = await this.userInfoModal.create({
+            _id: user._id,
+            email: body.email,
           });
         } else {
           throw new HttpException('该邮箱已被注册', HttpStatus.FORBIDDEN);

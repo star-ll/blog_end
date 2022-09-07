@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDateString,
   IsDefined,
   IsNumberString,
@@ -6,8 +7,8 @@ import {
 } from 'class-validator';
 
 export class CreatePostDto {
-  @IsString()
-  userId?: string;
+  // @IsString()
+  // userId?: string;
   @IsString()
   @IsDefined()
   title: string;
@@ -17,6 +18,9 @@ export class CreatePostDto {
   @IsString()
   @IsDefined()
   content: string;
+
+  @IsArray()
+  tag?: string[];
 }
 
 export class CreatePostResponseDto {
@@ -33,7 +37,9 @@ export class CreatePostResponseDto {
 
 export class FindAllPostDto {
   @IsNumberString()
+  @IsDefined()
   offset: number;
+  @IsDefined()
   @IsNumberString()
   limit: number;
 
@@ -45,4 +51,6 @@ export class FindAllPostDto {
   'createTime'?: Date;
   @IsDateString()
   'updateTime'?: Date;
+  @IsString()
+  tag?: string;
 }

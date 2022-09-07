@@ -35,8 +35,7 @@ export class PostController {
     type: ResponseDto,
   })
   create(@Body() CreatePostDto: CreatePostDto, @Req() req) {
-    CreatePostDto.userId = req.user.userId;
-    return this.postService.create(CreatePostDto);
+    return this.postService.create(req.user.userId, CreatePostDto);
   }
 
   // 增加文章浏览量

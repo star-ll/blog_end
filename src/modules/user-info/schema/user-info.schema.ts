@@ -3,16 +3,19 @@ import mongoose from 'mongoose';
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 const userObject = {
-  // userId: {
-  //   type: ObjectId,
-  //   unique: true,
-  // },
   _id: ObjectId,
   name: String,
   tag: Array,
   introduce: String,
-  phone: String,
+  phone: {
+    type: String,
+    unique: true,
+  },
   avatar: String,
+  email: {
+    type: String,
+    unique: true,
+  },
 };
 
 const userSchema = new mongoose.Schema({

@@ -18,11 +18,14 @@ export const CommentSchema = new mongoose.Schema(
 
 export const PostSchema = new mongoose.Schema(
   {
-    userId: String,
+    // userId: String,
 
     title: String,
 
-    author: String,
+    author: {
+      type: mongoose.Types.ObjectId,
+      ref: 'user_info',
+    },
 
     content: String,
 

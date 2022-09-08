@@ -10,6 +10,7 @@ const userObject = {
   phone: {
     type: String,
     unique: true,
+    required: false,
   },
   avatar: String,
   email: {

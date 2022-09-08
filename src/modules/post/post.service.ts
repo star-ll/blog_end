@@ -13,7 +13,7 @@ export class PostService {
   create(userId, createPostDto: CreatePostDto) {
     return this.postModel
       .create({
-        userId,
+        author: userId,
         ...createPostDto,
       })
       .then(() => {
@@ -38,7 +38,7 @@ export class PostService {
   async findOne(id: string) {
     try {
       const post = await this.postModel.findOne({ _id: id });
-      await post.populate('likes');
+      await post.populate(['likes', 'author']);
       return new ResponseJSON(post);
     } catch (err) {
       throw new HttpException('未找到该文章', HttpStatus.NOT_FOUND);

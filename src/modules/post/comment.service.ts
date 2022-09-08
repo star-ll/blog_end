@@ -26,8 +26,6 @@ export class PostCommentService {
     } catch (err) {
       throw new HttpException(err, 404);
     }
-
-    //   this.postModel.
   }
 
   async getPostComments(params) {
@@ -37,7 +35,9 @@ export class PostCommentService {
 
     try {
       const post = await this.postModel.findOne({ _id: postId });
-      await post.populate('comments.author');
+      await post.populate({
+        path: 'comments.author',
+      });
       const comments = post.comments;
       comments.sort((a, b) => {
         const l = new Date(a.createTime).getTime();
